@@ -16,32 +16,32 @@ public class DnsHeader {
     }
 
     public void setQOATRR(short qoatrr) {
-        bufRespBuffer.position(16)
+        bufRespBuffer.position(2)
                 .putShort(qoatrr);
     }
 
     public short getQDCOUNT() {
-        return bufRespBuffer.position(32)
+        return bufRespBuffer.position(4)
                 .getShort();
     }
 
     public void setQDCOUNT(short qdcount) {
-        bufRespBuffer.position(32)
+        bufRespBuffer.position(4)
                 .putShort(qdcount);
     }
 
     public void setANCOUNT(short ancount) {
-        bufRespBuffer.position(48)
+        bufRespBuffer.position(6)
                 .putShort(ancount);
     }
 
     public void setNSCOUNT(short nscount) {
-        bufRespBuffer.position(64)
+        bufRespBuffer.position(8)
                 .putShort(nscount);
     }
 
     public void setARCOUNT(short arcount) {
-        bufRespBuffer.position(80)
+        bufRespBuffer.position(10)
                 .putShort(arcount);
     }
 

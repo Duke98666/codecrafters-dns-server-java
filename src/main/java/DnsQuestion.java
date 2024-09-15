@@ -14,7 +14,7 @@ public class DnsQuestion {
     }
 
     public void setName(String name) {
-        bufRespBuffer.position(96);
+        bufRespBuffer.position(12);
         String[] labels = name.split("\\.");
         for (String label : labels) {
             byte[] bytes = label.getBytes(StandardCharsets.UTF_8);
@@ -24,7 +24,7 @@ public class DnsQuestion {
         // name.length() - the number of content characters
         // labels.length - the number of length bytes for each label
         // null byte - 1 byte
-        typePosition = 96 + name.length() + labels.length + 1;
+        typePosition = 12 + name.length() + labels.length + 1;
     }
 
     public void setType(short type) {
@@ -33,7 +33,7 @@ public class DnsQuestion {
     }
 
     public void setClass(short questionClass) {
-        bufRespBuffer.position(typePosition + 16)
+        bufRespBuffer.position(typePosition + 2)
                 .putShort(questionClass);
     }
 
