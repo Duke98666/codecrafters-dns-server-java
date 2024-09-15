@@ -1,48 +1,50 @@
 import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 
 public class DnsHeader {
 
     private final ByteBuffer bufRespBuffer;
 
-    DnsHeader(byte[] bufResponse) {
-        bufRespBuffer = ByteBuffer.wrap(bufResponse)
-                .order(ByteOrder.BIG_ENDIAN);
+    DnsHeader(ByteBuffer bufRespBuffer) {
+        this.bufRespBuffer = bufRespBuffer;
+    }
+
+    private short get(int position) {
+        int currPosition = bufRespBuffer.position();
+        short value = bufRespBuffer.position(position).getShort();
+        bufRespBuffer.position(currPosition);
+        return value;
     }
 
     public void setID(short id) {
-        bufRespBuffer.position(0)
-                .putShort(id);
+        bufRespBuffer.putShort(id);
     }
 
     public void setQOATRR(short qoatrr) {
-        bufRespBuffer.position(2)
-                .putShort(qoatrr);
+        bufRespBuffer.putShort(qoatrr);
     }
 
     public short getQDCOUNT() {
-        return bufRespBuffer.position(4)
-                .getShort();
+        return get(DnsConstants.DnsHeader.QDCOUNT_POSITION);
     }
 
     public void setQDCOUNT(short qdcount) {
-        bufRespBuffer.position(4)
-                .putShort(qdcount);
+        bufRespBuffer.putShort(qdcount);
+    }
+
+    public short getANCOUNT() {
+        return get(DnsConstants.DnsHeader.ANCOUNT_POSITION);
     }
 
     public void setANCOUNT(short ancount) {
-        bufRespBuffer.position(6)
-                .putShort(ancount);
+        bufRespBuffer.putShort(ancount);
     }
 
     public void setNSCOUNT(short nscount) {
-        bufRespBuffer.position(8)
-                .putShort(nscount);
+        bufRespBuffer.putShort(nscount);
     }
 
     public void setARCOUNT(short arcount) {
-        bufRespBuffer.position(10)
-                .putShort(arcount);
+        bufRespBuffer.putShort(arcount);
     }
 
 }

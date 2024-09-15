@@ -1,11 +1,11 @@
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 
-public class DnsQuestion {
+public class DnsAnswer {
 
     private final ByteBuffer bufRespBuffer;
 
-    DnsQuestion(ByteBuffer bufRespBuffer) {
+    DnsAnswer(ByteBuffer bufRespBuffer) {
         this.bufRespBuffer = bufRespBuffer;
     }
 
@@ -23,8 +23,24 @@ public class DnsQuestion {
         bufRespBuffer.putShort(type);
     }
 
-    public void setClass(short questionClass) {
-        bufRespBuffer.putShort(questionClass);
+    public void setClass(short answerClass) {
+        bufRespBuffer.putShort(answerClass);
+    }
+
+    public void setTTL(int ttl) {
+        bufRespBuffer.putInt(ttl);
+    }
+
+    public void setLength(short length) {
+        bufRespBuffer.putShort(length);
+    }
+
+    public void setData(String data) {
+        String[] digits = data.split("\\.");
+        for (String digit : digits) {
+            byte[] bytes = digit.getBytes(StandardCharsets.UTF_8);
+            bufRespBuffer.put(bytes);
+        }
     }
 
 }
