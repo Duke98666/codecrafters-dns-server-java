@@ -14,6 +14,7 @@ public class DnsMessage {
         bufResponse = new byte[512];
         header = new DnsHeader(bufResponse);
         question = new DnsQuestion(bufResponse);
+        init();
     }
 
     private void init() {
