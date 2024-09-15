@@ -15,12 +15,17 @@ public class DnsHeader {
         return value;
     }
 
+    private void set(int position, short value) {
+        int currPosition = bufRespBuffer.position();
+        bufRespBuffer.position(position).putShort(value).position(currPosition);
+    }
+
     public void setID(short id) {
-        bufRespBuffer.putShort(id);
+        set(DnsConstants.DnsHeader.ID_POSITION, id);
     }
 
     public void setQOATRR(short qoatrr) {
-        bufRespBuffer.putShort(qoatrr);
+        set(DnsConstants.DnsHeader.QOATRR_POSITION, qoatrr);
     }
 
     public short getQDCOUNT() {
@@ -28,7 +33,7 @@ public class DnsHeader {
     }
 
     public void setQDCOUNT(short qdcount) {
-        bufRespBuffer.putShort(qdcount);
+        set(DnsConstants.DnsHeader.QDCOUNT_POSITION, qdcount);
     }
 
     public short getANCOUNT() {
@@ -36,15 +41,15 @@ public class DnsHeader {
     }
 
     public void setANCOUNT(short ancount) {
-        bufRespBuffer.putShort(ancount);
+        set(DnsConstants.DnsHeader.ANCOUNT_POSITION, ancount);
     }
 
     public void setNSCOUNT(short nscount) {
-        bufRespBuffer.putShort(nscount);
+        set(DnsConstants.DnsHeader.NSCOUNT_POSITION, nscount);
     }
 
     public void setARCOUNT(short arcount) {
-        bufRespBuffer.putShort(arcount);
+        set(DnsConstants.DnsHeader.ARCOUNT_POSITION, arcount);
     }
 
 }

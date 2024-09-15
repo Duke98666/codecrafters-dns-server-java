@@ -27,11 +27,23 @@ class DnsConstants {
         // Additional Record Count (ARCOUNT) - 16 bits = 2 bytes = short
         static final short ARCOUNT = 0;
 
-        // Position QDCOUNT
+        // ID Position
+        static final short ID_POSITION = 0;
+
+        // QOATRR Position
+        static final short QOATRR_POSITION = 2;
+
+        // QDCOUNT Position
         static final int QDCOUNT_POSITION = 4;
 
-        // Position QDCOUNT
+        // ANCOUNT Position
         static final int ANCOUNT_POSITION = 6;
+
+        // NSCOUNT Position
+        static final short NSCOUNT_POSITION = 8;
+
+        // ARCOUNT Position
+        static final short ARCOUNT_POSITION = 10;
     }
 
     static class DnsQuestion {
