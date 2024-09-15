@@ -24,7 +24,7 @@ public class DnsQuestion {
         // name.length() - the number of content characters
         // labels.length - the number of length bytes for each label
         // null byte - 1 byte
-        typePosition = name.length() + labels.length + 1;
+        typePosition = 96 + name.length() + labels.length + 1;
     }
 
     public void setType(short type) {
