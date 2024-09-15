@@ -15,7 +15,7 @@ public class DnsQuestion {
 
     public void setName(String name) {
         bufRespBuffer.position(96);
-        String[] labels = name.split(".");
+        String[] labels = name.split("\\.");
         for (String label : labels) {
             byte[] bytes = label.getBytes(StandardCharsets.UTF_8);
             bufRespBuffer.put((byte) bytes.length).put(bytes);
