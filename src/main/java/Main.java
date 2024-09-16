@@ -11,9 +11,11 @@ public class Main {
                 serverSocket.receive(packet);
                 System.out.println("Received data");
 
-                DnsMessage message = new DnsMessage();
-                byte[] bufResponse = message.getBufResponse();
-                final DatagramPacket packetResponse = new DatagramPacket(bufResponse, bufResponse.length, packet.getSocketAddress());
+                final byte[] respBuf = new byte[512];
+                DnsMessage message = new DnsResponse(respBuf, new DnsQuery(buf));
+                byte[] bufResponse = message.getBufferBytes();
+                final DatagramPacket packetResponse = new DatagramPacket(bufResponse, bufResponse.length,
+                        packet.getSocketAddress());
                 serverSocket.send(packetResponse);
             }
         } catch (IOException e) {

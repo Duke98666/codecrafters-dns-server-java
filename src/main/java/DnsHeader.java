@@ -2,34 +2,38 @@ import java.nio.ByteBuffer;
 
 public class DnsHeader {
 
-    private final ByteBuffer bufRespBuffer;
+    private final ByteBuffer byteBuffer;
 
-    DnsHeader(ByteBuffer bufRespBuffer) {
-        this.bufRespBuffer = bufRespBuffer;
+    DnsHeader(ByteBuffer byteBuffer) {
+        this.byteBuffer = byteBuffer;
     }
 
     private short get(int position) {
-        int currPosition = bufRespBuffer.position();
-        short value = bufRespBuffer.position(position).getShort();
-        bufRespBuffer.position(currPosition);
+        int currPosition = byteBuffer.position();
+        short value = byteBuffer.position(position).getShort();
+        byteBuffer.position(currPosition);
         return value;
     }
 
     private void set(int position, short value) {
-        int currPosition = bufRespBuffer.position();
-        if (position == currPosition) {
-            bufRespBuffer.putShort(value);
-        } else {
-            bufRespBuffer.position(position).putShort(value).position(currPosition);
-        }
+        int currPosition = byteBuffer.position();
+        byteBuffer.position(position).putShort(value).position(currPosition);
+    }
+
+    public short getID() {
+        return get(DnsConstants.DnsHeader.ID_POSITION);
     }
 
     public void setID(short id) {
         set(DnsConstants.DnsHeader.ID_POSITION, id);
     }
 
-    public void setQOATRR(short qoatrr) {
-        set(DnsConstants.DnsHeader.QOATRR_POSITION, qoatrr);
+    public short getQOATRZR() {
+        return get(DnsConstants.DnsHeader.QOATRZR_POSITION);
+    }
+
+    public void setQOATRZR(short qoatrzr) {
+        set(DnsConstants.DnsHeader.QOATRZR_POSITION, qoatrzr);
     }
 
     public short getQDCOUNT() {

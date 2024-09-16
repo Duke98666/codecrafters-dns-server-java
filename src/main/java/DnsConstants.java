@@ -13,7 +13,7 @@ class DnsConstants {
         // Reserved (Z) - 3 bits
         // Response Code (RCODE) - 4 bits
         // 1 + 4 + 1 + 1 + 1 + 1 + 3 + 4 = 16 bits = short
-        static final short QOATRR = (short) (1 << 15);
+        static final short QOATRZR = (short) (0B1_0000_0_0_0_0_000_0000);
 
         // Question Count (QDCOUNT) - 16 bits = 2 bytes = short
         static final short QDCOUNT = 0;
@@ -30,8 +30,8 @@ class DnsConstants {
         // ID Position
         static final short ID_POSITION = 0;
 
-        // QOATRR Position
-        static final short QOATRR_POSITION = 2;
+        // QOATRZR Position
+        static final short QOATRZR_POSITION = 2;
 
         // QDCOUNT Position
         static final int QDCOUNT_POSITION = 4;
@@ -75,6 +75,12 @@ class DnsConstants {
 
         // Data - IP Address - bytes
         static final String RDATA = "8.8.8.8";
+    }
+
+    static class DnsQuery {
+        // ID Position
+        static final short ID_POSITION = 0;
+
     }
 
 }
