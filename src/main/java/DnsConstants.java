@@ -13,19 +13,7 @@ class DnsConstants {
         // Reserved (Z) - 3 bits
         // Response Code (RCODE) - 4 bits
         // 1 + 4 + 1 + 1 + 1 + 1 + 3 + 4 = 16 bits = short
-        static final short QOATRZR = (short) (0B1_0000_0_0_0_0_000_0000);
-
-        // Question Count (QDCOUNT) - 16 bits = 2 bytes = short
-        static final short QDCOUNT = 0;
-
-        // Answer Record Count (ANCOUNT) - 16 bits = 2 bytes = short
-        static final short ANCOUNT = 0;
-
-        // Authority Record Count (NSCOUNT) - 16 bits = 2 bytes = short
-        static final short NSCOUNT = 0;
-
-        // Additional Record Count (ARCOUNT) - 16 bits = 2 bytes = short
-        static final short ARCOUNT = 0;
+        static final short QR = (short) (0B1_0000_0_0_0_0_000_0000);
 
         // ID Position
         static final short ID_POSITION = 0;

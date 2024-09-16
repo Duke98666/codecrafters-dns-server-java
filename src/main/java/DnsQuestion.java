@@ -3,10 +3,10 @@ import java.nio.charset.StandardCharsets;
 
 public class DnsQuestion {
 
-    private final ByteBuffer bufRespBuffer;
+    private final ByteBuffer byteBuffer;
 
-    DnsQuestion(ByteBuffer bufRespBuffer) {
-        this.bufRespBuffer = bufRespBuffer;
+    DnsQuestion(ByteBuffer byteBuffer) {
+        this.byteBuffer = byteBuffer;
     }
 
     public void setName(String name) {
@@ -14,17 +14,17 @@ public class DnsQuestion {
         for (String label : labels) {
             byte[] bytes = label.getBytes(StandardCharsets.UTF_8);
             // content length + content
-            bufRespBuffer.put((byte) bytes.length).put(bytes);
+            byteBuffer.put((byte) bytes.length).put(bytes);
         }
-        bufRespBuffer.put((byte) 0); // null byte
+        byteBuffer.put((byte) 0); // null byte
     }
 
     public void setType(short type) {
-        bufRespBuffer.putShort(type);
+        byteBuffer.putShort(type);
     }
 
     public void setClass(short questionClass) {
-        bufRespBuffer.putShort(questionClass);
+        byteBuffer.putShort(questionClass);
     }
 
 }

@@ -21,7 +21,9 @@ public class DnsResponse extends DnsMessage {
 
         // Mimic OPCODE and RD
         short queryQOATRZR = (short) (0B0_1111_0_0_1_0_000_0000 & query.header.getQOATRZR());
-        short qoatrzr = (short) (DnsConstants.DnsHeader.QOATRZR | queryQOATRZR);
+        short queryOPCODE = (short) (0B0_1111_0_0_0_0_000_0000 & queryQOATRZR);
+        short rd = (short) (queryOPCODE == 0 ? 0 : 4);
+        short qoatrzr = (short) (DnsConstants.DnsHeader.QR | queryQOATRZR | rd);
         header.setQOATRZR(qoatrzr);
     }
 

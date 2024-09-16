@@ -3,10 +3,10 @@ import java.nio.charset.StandardCharsets;
 
 public class DnsAnswer {
 
-    private final ByteBuffer bufRespBuffer;
+    private final ByteBuffer byteBuffer;
 
-    DnsAnswer(ByteBuffer bufRespBuffer) {
-        this.bufRespBuffer = bufRespBuffer;
+    DnsAnswer(ByteBuffer byteBuffer) {
+        this.byteBuffer = byteBuffer;
     }
 
     public void setName(String name) {
@@ -14,32 +14,32 @@ public class DnsAnswer {
         for (String label : labels) {
             byte[] bytes = label.getBytes(StandardCharsets.UTF_8);
             // content length + content
-            bufRespBuffer.put((byte) bytes.length).put(bytes);
+            byteBuffer.put((byte) bytes.length).put(bytes);
         }
-        bufRespBuffer.put((byte) 0); // null byte
+        byteBuffer.put((byte) 0); // null byte
     }
 
     public void setType(short type) {
-        bufRespBuffer.putShort(type);
+        byteBuffer.putShort(type);
     }
 
     public void setClass(short answerClass) {
-        bufRespBuffer.putShort(answerClass);
+        byteBuffer.putShort(answerClass);
     }
 
     public void setTTL(int ttl) {
-        bufRespBuffer.putInt(ttl);
+        byteBuffer.putInt(ttl);
     }
 
     public void setLength(short length) {
-        bufRespBuffer.putShort(length);
+        byteBuffer.putShort(length);
     }
 
     public void setData(String data) {
         String[] digits = data.split("\\.");
         for (String digit : digits) {
             byte[] bytes = digit.getBytes(StandardCharsets.UTF_8);
-            bufRespBuffer.put(bytes);
+            byteBuffer.put(bytes);
         }
     }
 
