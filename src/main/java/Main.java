@@ -1,3 +1,7 @@
+import com.dinakarans.dns.DnsMessage;
+import com.dinakarans.dns.DnsQuery;
+import com.dinakarans.dns.DnsResponse;
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;

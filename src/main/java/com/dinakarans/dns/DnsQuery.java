@@ -1,5 +1,4 @@
-import java.nio.ByteBuffer;
-import java.util.Arrays;
+package com.dinakarans.dns;
 
 public class DnsQuery extends DnsMessage {
 
