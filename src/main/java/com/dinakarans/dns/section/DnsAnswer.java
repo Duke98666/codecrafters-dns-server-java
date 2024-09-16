@@ -60,11 +60,12 @@ public class DnsAnswer implements Section {
     }
 
     public void setRLength(short length) {
-        byteBuffer.putShort(length);
-        DnsUtil.setShort(byteBuffer, nameLength, length);
+        int position = getPosition(Fields.Answer.RDLength);
+        DnsUtil.setShort(byteBuffer, position, length);
     }
 
     public void setRData(String data) {
+        byteBuffer.position(getPosition(Fields.Answer.RData));
         String[] digits = data.split("\\.");
         for (String digit : digits) {
             byte[] bytes = digit.getBytes(StandardCharsets.UTF_8);
