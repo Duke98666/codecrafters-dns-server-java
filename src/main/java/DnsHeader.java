@@ -17,7 +17,11 @@ public class DnsHeader {
 
     private void set(int position, short value) {
         int currPosition = bufRespBuffer.position();
-        bufRespBuffer.position(position).putShort(value).position(currPosition);
+        if (position == currPosition) {
+            bufRespBuffer.putShort(value);
+        } else {
+            bufRespBuffer.position(position).putShort(value).position(currPosition);
+        }
     }
 
     public void setID(short id) {
