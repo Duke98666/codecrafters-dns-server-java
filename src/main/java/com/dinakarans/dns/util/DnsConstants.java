@@ -41,7 +41,7 @@ public class DnsConstants {
         public static final short RDLENGTH = 4;
 
         // Data - IP Address - bytes
-        public static final String RDATA = "8.8.8.8";
+        public static final int RDATA = 0X08080808;
     }
 
 }

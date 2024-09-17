@@ -8,7 +8,7 @@ public class DnsQuestion implements Section {
 
     private final ByteBuffer byteBuffer;
 
-    private final Section prevousSection;
+    private final Section previousSection;
 
     private int nameLength;
 
@@ -16,11 +16,11 @@ public class DnsQuestion implements Section {
 
     public DnsQuestion(ByteBuffer byteBuffer, Section previousSection) {
         this.byteBuffer = byteBuffer;
-        this.prevousSection = previousSection;
+        this.previousSection = previousSection;
     }
 
     private int getPosition(Fields.Question field) {
-        return prevousSection.getLimit() + switch (field) {
+        return previousSection.getLimit() + switch (field) {
             case Name -> 0;
             case Type -> nameLength;
             case Class -> nameLength + 2;
@@ -30,7 +30,7 @@ public class DnsQuestion implements Section {
     private void setLimit(int nameLength) {
         this.nameLength = nameLength;
         // name length + type (2 bytes) + class (2 bytes)
-        limit = nameLength + 4;
+        limit = previousSection.getLimit() + nameLength + 4;
     }
 
     public byte[] getName() {

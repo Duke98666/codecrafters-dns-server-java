@@ -1,9 +1,6 @@
 package com.dinakarans.dns.util;
 
-import com.dinakarans.dns.section.Fields;
-
 import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
 
 public final class DnsUtil {
 
@@ -23,6 +20,15 @@ public final class DnsUtil {
         }
     }
 
+    public static void setInt(ByteBuffer byteBuffer, int position, int value) {
+        int currPosition = byteBuffer.position();
+        if (currPosition == position) {
+            byteBuffer.putInt(value);
+        } else {
+            byteBuffer.position(position).putInt(value).position(currPosition);
+        }
+    }
+
     public static byte[] parseName(ByteBuffer byteBuffer, int position) {
         int index = position;
         int length = byteBuffer.get(index);
@@ -30,7 +36,7 @@ public final class DnsUtil {
             index += length + 1;
             length = byteBuffer.get(index);
         }
-        byte[] value = new byte[index - position];
+        byte[] value = new byte[index - position + 1];
         byteBuffer.get(position, value);
         return value;
     }

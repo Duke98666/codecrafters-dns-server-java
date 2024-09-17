@@ -9,7 +9,7 @@ public class DnsAnswer implements Section {
 
     private final ByteBuffer byteBuffer;
 
-    private final Section prevousSection;
+    private final Section previousSection;
 
     private int nameLength;
 
@@ -17,11 +17,11 @@ public class DnsAnswer implements Section {
 
     public DnsAnswer(ByteBuffer byteBuffer, Section previousSection) {
         this.byteBuffer = byteBuffer;
-        this.prevousSection = previousSection;
+        this.previousSection = previousSection;
     }
 
     private int getPosition(Fields.Answer field) {
-        return prevousSection.getLimit() + switch (field) {
+        return previousSection.getLimit() + switch (field) {
             case Name -> 0;
             case Type -> nameLength;
             case Class -> nameLength + 2;
@@ -36,7 +36,7 @@ public class DnsAnswer implements Section {
         // name length + type (2 bytes)
         // + class (2 bytes) + ttl (4 bytes)
         // + rdlength (2 bytes) + rdata (2 bytes)
-        limit = nameLength + 12;
+        limit = previousSection.getLimit() + nameLength + 12;
     }
 
     public void setName(byte[] name) {
@@ -56,7 +56,8 @@ public class DnsAnswer implements Section {
     }
 
     public void setTTL(int ttl) {
-        byteBuffer.putInt(ttl);
+        int position = getPosition(Fields.Answer.TTL);
+        DnsUtil.setInt(byteBuffer, position, ttl);
     }
 
     public void setRLength(short length) {
@@ -64,13 +65,9 @@ public class DnsAnswer implements Section {
         DnsUtil.setShort(byteBuffer, position, length);
     }
 
-    public void setRData(String data) {
-        byteBuffer.position(getPosition(Fields.Answer.RData));
-        String[] digits = data.split("\\.");
-        for (String digit : digits) {
-            byte[] bytes = digit.getBytes(StandardCharsets.UTF_8);
-            byteBuffer.put(bytes);
-        }
+    public void setRData(int data) {
+        int position = getPosition(Fields.Answer.RData);
+        DnsUtil.setInt(byteBuffer, position, data);
     }
 
     @Override
