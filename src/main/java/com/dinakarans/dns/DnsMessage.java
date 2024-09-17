@@ -4,6 +4,8 @@ import com.dinakarans.dns.section.DnsHeader;
 import com.dinakarans.dns.section.DnsQuestion;
 
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class DnsMessage {
 
@@ -11,13 +13,15 @@ public abstract class DnsMessage {
 
     protected final DnsHeader header;
 
-    protected final DnsQuestion question;
+    protected final List<DnsQuestion> questions;
 
     public DnsMessage(byte[] bufferBytes) {
         byteBuffer = ByteBuffer.wrap(bufferBytes);
         header = new DnsHeader(byteBuffer);
-        question = new DnsQuestion(byteBuffer, header);
+        questions = new ArrayList<>();
     }
+
+    abstract void setQuestions();
 
     public byte[] getBufferBytes() {
         byte[] value = new byte[512];

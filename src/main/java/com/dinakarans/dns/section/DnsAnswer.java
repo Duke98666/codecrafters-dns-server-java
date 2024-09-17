@@ -3,75 +3,51 @@ package com.dinakarans.dns.section;
 import com.dinakarans.dns.util.DnsUtil;
 
 import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
 
-public class DnsAnswer implements Section {
-
-    private final ByteBuffer byteBuffer;
-
-    private final Section previousSection;
+public class DnsAnswer extends Section {
 
     private int nameLength;
 
-    private int limit;
-
-    public DnsAnswer(ByteBuffer byteBuffer, Section previousSection) {
-        this.byteBuffer = byteBuffer;
-        this.previousSection = previousSection;
+    public DnsAnswer(ByteBuffer byteBuffer) {
+        super(byteBuffer);
     }
 
-    private int getPosition(Fields.Answer field) {
-        return previousSection.getLimit() + switch (field) {
-            case Name -> 0;
-            case Type -> nameLength;
-            case Class -> nameLength + 2;
-            case TTL -> nameLength + 4;
-            case RDLength -> nameLength + 8;
-            case RData -> nameLength + 10;
-        };
-    }
-
-    private void setLimit(int nameLength) {
-        this.nameLength = nameLength;
-        // name length + type (2 bytes)
-        // + class (2 bytes) + ttl (4 bytes)
-        // + rdlength (2 bytes) + rdata (2 bytes)
-        limit = previousSection.getLimit() + nameLength + 12;
-    }
-
-    public void setName(byte[] name) {
-        int position = getPosition(Fields.Answer.Name);
-        byteBuffer.put(position, name);
-        setLimit(name.length);
+    public void setName(String name) {
+        byte[] nameBytes = DnsUtil.getNameBytes(name);
+        byteBuffer.put(getPosition(Field.A_Name), nameBytes);
+        nameLength = nameBytes.length;
     }
 
     public void setType(short type) {
-        int position = getPosition(Fields.Answer.Type);
-        DnsUtil.setShort(byteBuffer, position, type);
+        DnsUtil.setShort(byteBuffer, getPosition(Field.A_Type), type);
     }
 
     public void setClass_(short class_) {
-        int position = getPosition(Fields.Answer.Class);
-        DnsUtil.setShort(byteBuffer, position, class_);
+        DnsUtil.setShort(byteBuffer, getPosition(Field.A_Class), class_);
     }
 
     public void setTTL(int ttl) {
-        int position = getPosition(Fields.Answer.TTL);
-        DnsUtil.setInt(byteBuffer, position, ttl);
+        DnsUtil.setInt(byteBuffer, getPosition(Field.A_TTL), ttl);
     }
 
-    public void setRLength(short length) {
-        int position = getPosition(Fields.Answer.RDLength);
-        DnsUtil.setShort(byteBuffer, position, length);
+    public void setRDLength(short length) {
+        DnsUtil.setShort(byteBuffer, getPosition(Field.A_RDLength), length);
     }
 
     public void setRData(int data) {
-        int position = getPosition(Fields.Answer.RData);
-        DnsUtil.setInt(byteBuffer, position, data);
+        DnsUtil.setInt(byteBuffer, getPosition(Field.A_RData), data);
     }
 
     @Override
-    public int getLimit() {
-        return limit;
+    int getPosition(Field field) {
+        return switch (field) {
+            case A_Name -> 0;
+            case A_Type -> nameLength;
+            case A_Class -> nameLength + 2;
+            case A_TTL -> nameLength + 4;
+            case A_RDLength -> nameLength + 8;
+            case A_RData -> nameLength + 10;
+            default -> nameLength + 14;
+        };
     }
 }

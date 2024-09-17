@@ -4,75 +4,47 @@ import com.dinakarans.dns.util.DnsUtil;
 
 import java.nio.ByteBuffer;
 
-public class DnsQuestion implements Section {
-
-    private final ByteBuffer byteBuffer;
-
-    private final Section previousSection;
+public class DnsQuestion extends Section {
 
     private int nameLength;
 
-    private int limit;
-
-    public DnsQuestion(ByteBuffer byteBuffer, Section previousSection) {
-        this.byteBuffer = byteBuffer;
-        this.previousSection = previousSection;
+    public DnsQuestion(ByteBuffer byteBuffer) {
+        super(byteBuffer);
     }
 
-    private int getPosition(Fields.Question field) {
-        return previousSection.getLimit() + switch (field) {
-            case Name -> 0;
-            case Type -> nameLength;
-            case Class -> nameLength + 2;
-        };
+    public String getName() {
+        return DnsUtil.parseName(byteBuffer);
     }
 
-    private void setLimit(int nameLength) {
-        this.nameLength = nameLength;
-        // name length + type (2 bytes) + class (2 bytes)
-        limit = previousSection.getLimit() + nameLength + 4;
-    }
-
-    public byte[] getName() {
-        int position = getPosition(Fields.Question.Name);
-        if (nameLength == 0) {
-            byte[] name = DnsUtil.parseName(byteBuffer, position);
-            setLimit(name.length);
-            return name;
-        }
-        byte[] name = new byte[nameLength];
-        byteBuffer.get(position, name);
-        return name;
-    }
-
-    public void setName(byte[] name) {
-        int position = getPosition(Fields.Question.Name);
-        byteBuffer.put(position, name);
-        setLimit(name.length);
+    public void setName(String name) {
+        byte[] nameBytes = DnsUtil.getNameBytes(name);
+        byteBuffer.put(getPosition(Field.Q_Name), nameBytes);
+        nameLength = nameBytes.length;
     }
 
     public short getType() {
-        int position = getPosition(Fields.Question.Type);
-        return DnsUtil.getShort(byteBuffer, position);
+        return DnsUtil.getShort(byteBuffer, getPosition(Field.Q_Type));
     }
 
     public void setType(short type) {
-        int position = getPosition(Fields.Question.Type);
-        DnsUtil.setShort(byteBuffer, position, type);
+        DnsUtil.setShort(byteBuffer, getPosition(Field.Q_Type), type);
     }
 
     public short getClass_() {
-        int position = getPosition(Fields.Question.Class);
-        return DnsUtil.getShort(byteBuffer, position);
+        return DnsUtil.getShort(byteBuffer, getPosition(Field.Q_Class));
     }
 
     public void setClass_(short class_) {
-        int position = getPosition(Fields.Question.Class);
-        DnsUtil.setShort(byteBuffer, position, class_);
+        DnsUtil.setShort(byteBuffer, getPosition(Field.Q_Class), class_);
     }
 
     @Override
-    public int getLimit() {
-        return limit;
+    public int getPosition(Field field) {
+        return switch (field) {
+            case Q_Name -> 0;
+            case Q_Type -> nameLength;
+            case Q_Class -> nameLength + 2;
+            default -> nameLength + 4;
+        };
     }
 }

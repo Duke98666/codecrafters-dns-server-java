@@ -1,6 +1,8 @@
 package com.dinakarans.dns.util;
 
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
+import java.util.StringJoiner;
 
 public final class DnsUtil {
 
@@ -29,20 +31,42 @@ public final class DnsUtil {
         }
     }
 
-    public static byte[] parseName(ByteBuffer byteBuffer, int position) {
-        int index = position;
-        int length = byteBuffer.get(index);
-        while (length != 0) {
-            index += length + 1;
-            length = byteBuffer.get(index);
+    public static String parseName(ByteBuffer byteBuffer) {
+        StringJoiner name = new StringJoiner(".");
+        int labelLength;
+        byteBuffer.rewind();
+        while ((labelLength = byteBuffer.get()) != 0) {
+            if ((labelLength & 0B11_00_00_00) == 0B11_00_00_00) {
+                int offset = ((labelLength & 0B00_11_11_11) << 8) | (byteBuffer.get() & 0B11_11_11_11);
+                byteBuffer.position(offset);
+            } else {
+                byte[] label = new byte[labelLength];
+                byteBuffer.get(label);
+                name.add(new String(label, StandardCharsets.UTF_8));
+            }
         }
-        byte[] value = new byte[index - position + 1];
-        byteBuffer.get(position, value);
-        return value;
+        byteBuffer.rewind();
+        return name.toString();
+    }
+
+    public static byte[] getNameBytes(String name) {
+        String[] labels = name.split("\\.");
+        // n labels are separated by (n - 1) dots (.)
+        // total content characters (x1) = (name.length() - labels.length + 1)
+        // total prefix label length bytes (x2) = labels.length
+        // null byte (x3) = 1
+        // total = x1 + x2 + x3 = name.length() + 2
+        int nameBytesLength = name.length() + 2;
+        byte[] nameBytes = new byte[nameBytesLength];
+        ByteBuffer nameBuffer = ByteBuffer.wrap(nameBytes);
+        for (String label : labels) {
+            nameBuffer.put((byte) label.length()).put(label.getBytes(StandardCharsets.UTF_8));
+        }
+        nameBuffer.put((byte) 0);
+        return nameBytes;
     }
 
     private DnsUtil() {
         // Utility class
     }
-
 }

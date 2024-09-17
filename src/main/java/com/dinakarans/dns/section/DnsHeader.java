@@ -1,53 +1,53 @@
 package com.dinakarans.dns.section;
 
-import com.dinakarans.dns.util.DnsConstants;
 import com.dinakarans.dns.util.DnsUtil;
 
 import java.nio.ByteBuffer;
 
-public class DnsHeader implements Section {
-
-    private final ByteBuffer byteBuffer;
+public class DnsHeader extends Section {
 
     public DnsHeader(ByteBuffer byteBuffer) {
-        this.byteBuffer = byteBuffer;
+        super(byteBuffer);
     }
 
     public short getID() {
-        return DnsUtil.getShort(byteBuffer, DnsConstants.DnsHeader.ID_POSITION);
+        return DnsUtil.getShort(byteBuffer, getPosition(Field.H_ID));
     }
 
     public void setID(short id) {
-        DnsUtil.setShort(byteBuffer, DnsConstants.DnsHeader.ID_POSITION, id);
+        DnsUtil.setShort(byteBuffer, getPosition(Field.H_ID), id);
     }
 
     public short getQOATRZR() {
-        return DnsUtil.getShort(byteBuffer, DnsConstants.DnsHeader.QOATRZR_POSITION);
+        return DnsUtil.getShort(byteBuffer, getPosition(Field.H_QOATRZR));
     }
 
     public void setQOATRZR(short qoatrzr) {
-        DnsUtil.setShort(byteBuffer, DnsConstants.DnsHeader.QOATRZR_POSITION, qoatrzr);
+        DnsUtil.setShort(byteBuffer, getPosition(Field.H_QOATRZR), qoatrzr);
     }
 
     public short getQDCOUNT() {
-        return DnsUtil.getShort(byteBuffer, DnsConstants.DnsHeader.QDCOUNT_POSITION);
+        return DnsUtil.getShort(byteBuffer, getPosition(Field.H_QDCOUNT));
     }
 
     public void setQDCOUNT(short qdcount) {
-        DnsUtil.setShort(byteBuffer, DnsConstants.DnsHeader.QDCOUNT_POSITION, qdcount);
-    }
-
-    public short getANCOUNT() {
-        return DnsUtil.getShort(byteBuffer, DnsConstants.DnsHeader.ANCOUNT_POSITION);
+        DnsUtil.setShort(byteBuffer, getPosition(Field.H_QDCOUNT), qdcount);
     }
 
     public void setANCOUNT(short ancount) {
-        DnsUtil.setShort(byteBuffer, DnsConstants.DnsHeader.ANCOUNT_POSITION, ancount);
+        DnsUtil.setShort(byteBuffer, getPosition(Field.H_ANCOUNT), ancount);
     }
 
     @Override
-    public int getLimit() {
-        return 12;
+    int getPosition(Field field) {
+        return switch (field) {
+            case H_ID -> 0;
+            case H_QOATRZR -> 2;
+            case H_QDCOUNT -> 4;
+            case H_ANCOUNT -> 6;
+            case H_NSCOUNT -> 8;
+            case H_ARCOUNT -> 10;
+            default -> 12;
+        };
     }
-
 }

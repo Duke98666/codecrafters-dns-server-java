@@ -1,7 +1,23 @@
 package com.dinakarans.dns.section;
 
-public interface Section {
+import java.nio.ByteBuffer;
 
-    int getLimit();
+abstract class Section {
+
+    protected final ByteBuffer byteBuffer;
+
+    Section(ByteBuffer byteBuffer) {
+        this.byteBuffer = byteBuffer.slice();
+    }
+
+    abstract int getPosition(Field field);
+
+    public ByteBuffer getByteBuffer() {
+        return byteBuffer.rewind();
+    }
+
+    public ByteBuffer getNextByteBuffer() {
+        return byteBuffer.position(getPosition(Field.LIMIT));
+    }
 
 }
