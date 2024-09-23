@@ -110,6 +110,7 @@ public final class DnsUtil {
             byte[] rDataBytes = new byte[answer.getRdLength()];
             byteBuffer.get(rDataBytes);
             answer.setRData(new String(rDataBytes, StandardCharsets.UTF_8));
+            System.out.println(answer);
             answers.add(answer);
         }
         return answers;

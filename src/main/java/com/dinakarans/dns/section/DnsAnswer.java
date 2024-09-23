@@ -40,4 +40,16 @@ public class DnsAnswer extends DnsQuestion {
     public void setRData(String rData) {
         this.rData = rData;
     }
+
+    @Override
+    public String toString() {
+        return "DnsAnswer{" +
+                "name=" + getName() +
+                ", type=" + getType() +
+                ", class=" + getClazz() +
+                ", ttl=" + ttl +
+                ", rdLength=" + rdLength +
+                ", rData='" + rData + '\'' +
+                '}';
+    }
 }
