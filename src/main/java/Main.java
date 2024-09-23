@@ -45,11 +45,14 @@ public class Main {
                     serverSocket.receive(resolverResponsePacket);
 
                     DnsResponse resolverResponse = DnsUtil.readResponse(resolverResponseBytes);
-                    response.getAnswers().add(resolverResponse.getAnswers().getFirst());
+                    if (!resolverResponse.getAnswers().isEmpty()) {
+                        response.getAnswers().add(resolverResponse.getAnswers().getFirst());
+                    }
 
                     resolverQuery.getQuestions().clear();
                 }
 
+                response.getHeader().setAncount(response.getHeader().getQdcount());
                 byte[] responseBytes = response.array();
                 final DatagramPacket packetResponse = new DatagramPacket(responseBytes, responseBytes.length,
                         packet.getSocketAddress());
