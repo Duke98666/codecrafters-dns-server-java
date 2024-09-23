@@ -34,7 +34,6 @@ public class DnsResponse extends DnsQuery {
         short rcode = (short) (opcode == 0 ? 0 : 0B0_0000_0_0_0_0_000_0100);
         flags = (short) (qr | opcode | rcode | rd);
         header.setFlags(flags);
-        header.setAncount(header.getQdcount());
     }
 
     @Override
