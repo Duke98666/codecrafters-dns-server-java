@@ -1,9 +1,5 @@
 package com.dinakarans.dns.section;
 
-import com.dinakarans.dns.util.DnsUtil;
-
-import java.nio.ByteBuffer;
-
 public class DnsHeader {
 
     private short id;

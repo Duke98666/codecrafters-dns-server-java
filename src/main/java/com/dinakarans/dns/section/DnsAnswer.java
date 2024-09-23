@@ -1,7 +1,5 @@
 package com.dinakarans.dns.section;
 
-import java.util.StringJoiner;
-
 public class DnsAnswer extends DnsQuestion {
     private int ttl;
 
@@ -31,23 +29,5 @@ public class DnsAnswer extends DnsQuestion {
 
     public void setRData(byte[] rData) {
         this.rData = rData;
-    }
-
-    @Override
-    public String toString() {
-        StringJoiner rDataBuilder = new StringJoiner(".");
-        for (int i = 0; i < rdLength; ++i) {
-            rDataBuilder.add(String.valueOf(rData[i]));
-        }
-        return "DnsAnswer{" +
-                "name=" + getName() +
-                ", type=" + getType() +
-                ", class=" + getClazz() +
-                ", ttl=" + ttl +
-                ", rdLength=" + rdLength +
-                ", rData='"
-                    + rDataBuilder.toString()
-                + '\'' +
-                '}';
     }
 }
