@@ -10,6 +10,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.StringJoiner;
 
@@ -111,11 +112,11 @@ public final class DnsUtil {
             byteBuffer.get(rDataBytes);
             System.out.println("readAnswers - '"
                             + String.valueOf(rDataBytes[0]) + "."
-                            + String.valueOf(rDataBytes[0]) + "."
-                            + String.valueOf(rDataBytes[0]) + "."
-                            + String.valueOf(rDataBytes[0]) + "'"
+                            + String.valueOf(rDataBytes[1]) + "."
+                            + String.valueOf(rDataBytes[2]) + "."
+                            + String.valueOf(rDataBytes[3]) + "'"
             );
-            answer.setRData(new String(rDataBytes, StandardCharsets.UTF_8));
+            answer.setRData(Arrays.copyOf(rDataBytes, rDataBytes.length));
             System.out.println("readAnswers - " + answer);
             answers.add(answer);
         }
@@ -146,14 +147,14 @@ public final class DnsUtil {
             byteBuffer.putShort(answer.getClazz());
             byteBuffer.putInt(answer.getTtl());
             byteBuffer.putShort(answer.getRdLength());
-            byte[] rData = answer.getRData().getBytes(StandardCharsets.UTF_8);
-            byteBuffer.put(rData);
+            byte[] rDataBytes = answer.getRData();
+            byteBuffer.put(Arrays.copyOf(rDataBytes, rDataBytes.length));
             System.out.println("writeAnswers - " + answer);
             System.out.println("writeAnswers - '"
-                    + String.valueOf(rData[0]) + "."
-                    + String.valueOf(rData[0]) + "."
-                    + String.valueOf(rData[0]) + "."
-                    + String.valueOf(rData[0]) + "'"
+                    + String.valueOf(rDataBytes[0]) + "."
+                    + String.valueOf(rDataBytes[1]) + "."
+                    + String.valueOf(rDataBytes[2]) + "."
+                    + String.valueOf(rDataBytes[3]) + "'"
             );
         }
     }

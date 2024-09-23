@@ -5,7 +5,7 @@ public class DnsAnswer extends DnsQuestion {
 
     private short rdLength;
 
-    private String rData;
+    private byte[] rData;
 
     public int getTtl() {
         return ttl;
@@ -23,11 +23,11 @@ public class DnsAnswer extends DnsQuestion {
         this.rdLength = rdLength;
     }
 
-    public String getRData() {
+    public byte[] getRData() {
         return rData;
     }
 
-    public void setRData(String rData) {
+    public void setRData(byte[] rData) {
         this.rData = rData;
     }
 
@@ -40,10 +40,10 @@ public class DnsAnswer extends DnsQuestion {
                 ", ttl=" + ttl +
                 ", rdLength=" + rdLength +
                 ", rData='"
-                    + String.valueOf((int) rData.charAt(0)) + "."
-                    + String.valueOf((int) rData.charAt(1)) + "."
-                    + String.valueOf((int) rData.charAt(2)) + "."
-                    + String.valueOf((int) rData.charAt(3))
+                    + String.valueOf(rData[0]) + "."
+                    + String.valueOf(rData[1]) + "."
+                    + String.valueOf(rData[2]) + "."
+                    + String.valueOf(rData[3])
                 + '\'' +
                 '}';
     }
