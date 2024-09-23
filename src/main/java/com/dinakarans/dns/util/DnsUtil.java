@@ -141,6 +141,7 @@ public final class DnsUtil {
             byteBuffer.putInt(answer.getTtl());
             byteBuffer.putShort(answer.getRdLength());
             byteBuffer.put(answer.getRData().getBytes(StandardCharsets.UTF_8));
+            System.out.println(answer);
         }
     }
 }

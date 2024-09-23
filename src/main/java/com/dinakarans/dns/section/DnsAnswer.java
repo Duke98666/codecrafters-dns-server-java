@@ -7,16 +7,6 @@ public class DnsAnswer extends DnsQuestion {
 
     private String rData;
 
-    public DnsAnswer() {
-        super();
-    }
-
-    public DnsAnswer(DnsAnswer answer) {
-        this.ttl = answer.ttl;
-        this.rdLength = answer.rdLength;
-        this.rData = answer.rData;
-    }
-
     public int getTtl() {
         return ttl;
     }

@@ -8,16 +8,6 @@ public class DnsQuestion {
 
     private short clazz;
 
-    public DnsQuestion() {
-        super();
-    }
-
-    public DnsQuestion(DnsQuestion question) {
-        this.name = new String(question.name);
-        this.type = question.type;
-        this.clazz = question.clazz;
-    }
-
     public String getName() {
         return name;
     }
