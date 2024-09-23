@@ -109,8 +109,14 @@ public final class DnsUtil {
             answer.setRdLength(byteBuffer.getShort());
             byte[] rDataBytes = new byte[answer.getRdLength()];
             byteBuffer.get(rDataBytes);
+            System.out.println("readAnswers - '"
+                            + String.valueOf(rDataBytes[0]) + "."
+                            + String.valueOf(rDataBytes[0]) + "."
+                            + String.valueOf(rDataBytes[0]) + "."
+                            + String.valueOf(rDataBytes[0]) + "'"
+            );
             answer.setRData(new String(rDataBytes, StandardCharsets.UTF_8));
-            System.out.println(answer);
+            System.out.println("readAnswers - " + answer);
             answers.add(answer);
         }
         return answers;
@@ -140,8 +146,15 @@ public final class DnsUtil {
             byteBuffer.putShort(answer.getClazz());
             byteBuffer.putInt(answer.getTtl());
             byteBuffer.putShort(answer.getRdLength());
-            byteBuffer.put(answer.getRData().getBytes(StandardCharsets.UTF_8));
-            System.out.println(answer);
+            byte[] rData = answer.getRData().getBytes(StandardCharsets.UTF_8);
+            byteBuffer.put(rData);
+            System.out.println("writeAnswers - " + answer);
+            System.out.println("writeAnswers - '"
+                    + String.valueOf(rData[0]) + "."
+                    + String.valueOf(rData[0]) + "."
+                    + String.valueOf(rData[0]) + "."
+                    + String.valueOf(rData[0]) + "'"
+            );
         }
     }
 }
