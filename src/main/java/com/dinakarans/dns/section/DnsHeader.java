@@ -4,50 +4,78 @@ import com.dinakarans.dns.util.DnsUtil;
 
 import java.nio.ByteBuffer;
 
-public class DnsHeader extends Section {
+public class DnsHeader {
 
-    public DnsHeader(ByteBuffer byteBuffer) {
-        super(byteBuffer);
+    private short id;
+
+    private short flags;
+
+    private short qdcount;
+
+    private short ancount;
+
+    private short nscount;
+
+    private short arcount;
+
+    public DnsHeader() {
+        super();
     }
 
-    public short getID() {
-        return DnsUtil.getShort(byteBuffer, getPosition(Field.H_ID));
+    public DnsHeader(DnsHeader header) {
+        this.id = header.id;
+        this.flags = header.flags;
+        this.qdcount = header.qdcount;
+        this.ancount = header.ancount;
+        this.nscount = header.nscount;
+        this.arcount = header.arcount;
     }
 
-    public void setID(short id) {
-        DnsUtil.setShort(byteBuffer, getPosition(Field.H_ID), id);
+    public short getId() {
+        return id;
     }
 
-    public short getQOATRZR() {
-        return DnsUtil.getShort(byteBuffer, getPosition(Field.H_QOATRZR));
+    public void setId(short id) {
+        this.id = id;
     }
 
-    public void setQOATRZR(short qoatrzr) {
-        DnsUtil.setShort(byteBuffer, getPosition(Field.H_QOATRZR), qoatrzr);
+    public short getFlags() {
+        return flags;
     }
 
-    public short getQDCOUNT() {
-        return DnsUtil.getShort(byteBuffer, getPosition(Field.H_QDCOUNT));
+    public void setFlags(short flags) {
+        this.flags = flags;
     }
 
-    public void setQDCOUNT(short qdcount) {
-        DnsUtil.setShort(byteBuffer, getPosition(Field.H_QDCOUNT), qdcount);
+    public short getQdcount() {
+        return qdcount;
     }
 
-    public void setANCOUNT(short ancount) {
-        DnsUtil.setShort(byteBuffer, getPosition(Field.H_ANCOUNT), ancount);
+    public void setQdcount(short qdcount) {
+        this.qdcount = qdcount;
     }
 
-    @Override
-    int getPosition(Field field) {
-        return switch (field) {
-            case H_ID -> 0;
-            case H_QOATRZR -> 2;
-            case H_QDCOUNT -> 4;
-            case H_ANCOUNT -> 6;
-            case H_NSCOUNT -> 8;
-            case H_ARCOUNT -> 10;
-            default -> 12;
-        };
+    public short getAncount() {
+        return ancount;
+    }
+
+    public void setAncount(short ancount) {
+        this.ancount = ancount;
+    }
+
+    public short getNscount() {
+        return nscount;
+    }
+
+    public void setNscount(short nscount) {
+        this.nscount = nscount;
+    }
+
+    public short getArcount() {
+        return arcount;
+    }
+
+    public void setArcount(short arcount) {
+        this.arcount = arcount;
     }
 }

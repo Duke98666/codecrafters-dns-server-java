@@ -1,78 +1,45 @@
 package com.dinakarans.dns;
 
 import com.dinakarans.dns.section.DnsAnswer;
-import com.dinakarans.dns.section.DnsQuestion;
-import com.dinakarans.dns.util.DnsConstants;
+import com.dinakarans.dns.section.DnsHeader;
+import com.dinakarans.dns.util.DnsUtil;
 
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DnsResponse extends DnsMessage {
+public class DnsResponse extends DnsQuery {
 
-    private final DnsQuery query;
+    private List<DnsAnswer> answers;
 
-    protected final List<DnsAnswer> answers;
-
-    public DnsResponse(byte[] respBufBytes, DnsQuery query) {
-        super(respBufBytes);
-        this.query = query;
-        answers = new ArrayList<>();
-        init();
+    public DnsResponse() {
+        this.answers = new ArrayList<>();
     }
 
-    private void init() {
-        setHeader();
-        setQuestions();
-        setAnswers();
+    public List<DnsAnswer> getAnswers() {
+        return answers;
     }
 
-    private void setHeader() {
-        header.setID(query.header.getID());
-
-        // Mimic OPCODE and RD
-        short queryQOATRZR = (short) (0B0_1111_0_0_1_0_000_0000 & query.header.getQOATRZR());
-        short queryOPCODE = (short) (0B0_1111_0_0_0_0_000_0000 & queryQOATRZR);
-        short rd = (short) (queryOPCODE == 0 ? 0B0_0000_0_0_0_0_000_0000 : 0B0_0000_0_0_0_0_000_0100);
-        short qoatrzr = (short) (DnsConstants.DnsHeader.QOATRZR | queryQOATRZR | rd);
-        header.setQOATRZR(qoatrzr);
+    public void setAnswers(List<DnsAnswer> answers) {
+        this.answers = answers;
     }
 
     @Override
-    void setQuestions() {
-        short qdcount = query.header.getQDCOUNT();
-        if (qdcount == 0) {
-            return;
-        }
-        header.setQDCOUNT(qdcount);
-        DnsQuestion question = new DnsQuestion(header.getNextByteBuffer());
-        for (int i = 0; i < qdcount; ++i) {
-            questions.add(question);
-            DnsQuestion queryQuestion = query.questions.get(i);
-            question.setName(queryQuestion.getName());
-            question.setType(queryQuestion.getType());
-            question.setClass_(queryQuestion.getClass_());
-            question = new DnsQuestion(question.getNextByteBuffer());
-        }
+    public void setHeader(DnsHeader header) {
+        super.setHeader(header);
+        short flags = header.getFlags();
+        short qr = (short) 0B1_0000_0_0_0_0_000_0000;
+        short opcode = (short) (0B0_1111_0_0_0_0_000_0000 & flags);
+        short rd = (short) (0B0_0000_0_0_1_0_000_0000 & flags);
+        short rcode = (short) (opcode == 0 ? 0 : 0B0_0000_0_0_0_0_000_0100);
+        flags = (short) (qr | opcode | rcode | rd);
+        header.setFlags(flags);
     }
 
-    private void setAnswers() {
-        short ancount = query.header.getQDCOUNT();
-        if (ancount == 0) {
-            return;
-        }
-        header.setANCOUNT(ancount);
-        DnsAnswer answer = new DnsAnswer(questions.getLast().getNextByteBuffer());
-        for (int i = 0; i < ancount; ++i) {
-            answers.add(answer);
-            DnsQuestion queryQuestion = query.questions.get(i);
-            answer.setName(queryQuestion.getName());
-            answer.setType(queryQuestion.getType());
-            answer.setClass_(queryQuestion.getClass_());
-            answer.setTTL(DnsConstants.DnsAnswer.TTL);
-            answer.setRDLength(DnsConstants.DnsAnswer.RDLENGTH);
-            answer.setRData(DnsConstants.DnsAnswer.RDATA);
-            answer = new DnsAnswer(answer.getNextByteBuffer());
-        }
+    @Override
+    protected ByteBuffer byteBuffer() {
+        ByteBuffer byteBuffer = super.byteBuffer();
+        DnsUtil.writeAnswers(byteBuffer, getAnswers());
+        return byteBuffer;
     }
-
 }

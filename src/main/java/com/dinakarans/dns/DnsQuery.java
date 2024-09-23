@@ -1,32 +1,50 @@
 package com.dinakarans.dns;
 
+import com.dinakarans.dns.section.DnsHeader;
 import com.dinakarans.dns.section.DnsQuestion;
 import com.dinakarans.dns.util.DnsUtil;
 
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.util.ArrayList;
+import java.util.List;
 
-public class DnsQuery extends DnsMessage {
+public class DnsQuery {
 
-    public DnsQuery(byte[] reqBufBytes) {
-        super(reqBufBytes);
-        init();
+    private DnsHeader header;
+
+    private List<DnsQuestion> questions;
+
+    public DnsQuery() {
+        this.questions = new ArrayList<>();
     }
 
-    private void init() {
-        setQuestions();
+    public DnsHeader getHeader() {
+        return header;
     }
 
-    @Override
-    void setQuestions() {
-        int qdcount = header.getQDCOUNT();
-        DnsQuestion question = new DnsQuestion(header.getNextByteBuffer());
-        for (int i = 0; i < qdcount; ++i) {
-            questions.add(question);
-            ByteBuffer questionByteBuffer = question.getByteBuffer();
-            String name = DnsUtil.parseName(questionByteBuffer);
-            question.setName(name);
-            question = new DnsQuestion(question.getNextByteBuffer());
-        }
+    public void setHeader(DnsHeader header) {
+        this.header = header;
+    }
+
+    public List<DnsQuestion> getQuestions() {
+        return questions;
+    }
+
+    public void setQuestions(List<DnsQuestion> questions) {
+        this.questions = questions;
+    }
+
+    protected ByteBuffer byteBuffer() {
+        byte[] bytes = new byte[512];
+        ByteBuffer byteBuffer = ByteBuffer.wrap(bytes).order(ByteOrder.BIG_ENDIAN);
+        DnsUtil.writeHeader(byteBuffer, getHeader());
+        DnsUtil.writeQuestions(byteBuffer, getQuestions());
+        return byteBuffer;
+    }
+
+    public byte[] array() {
+        return byteBuffer().array();
     }
 
 }

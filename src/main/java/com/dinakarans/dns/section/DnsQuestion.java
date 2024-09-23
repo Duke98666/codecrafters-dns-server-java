@@ -1,50 +1,44 @@
 package com.dinakarans.dns.section;
 
-import com.dinakarans.dns.util.DnsUtil;
+public class DnsQuestion {
 
-import java.nio.ByteBuffer;
+    private String name;
 
-public class DnsQuestion extends Section {
+    private short type;
 
-    private int nameLength;
+    private short clazz;
 
-    public DnsQuestion(ByteBuffer byteBuffer) {
-        super(byteBuffer);
+    public DnsQuestion() {
+        super();
+    }
+
+    public DnsQuestion(DnsQuestion question) {
+        this.name = new String(question.name);
+        this.type = question.type;
+        this.clazz = question.clazz;
     }
 
     public String getName() {
-        return DnsUtil.parseName(byteBuffer);
+        return name;
     }
 
     public void setName(String name) {
-        byte[] nameBytes = DnsUtil.getNameBytes(name);
-        byteBuffer.put(getPosition(Field.Q_Name), nameBytes);
-        nameLength = nameBytes.length;
+        this.name = name;
     }
 
     public short getType() {
-        return DnsUtil.getShort(byteBuffer, getPosition(Field.Q_Type));
+        return type;
     }
 
     public void setType(short type) {
-        DnsUtil.setShort(byteBuffer, getPosition(Field.Q_Type), type);
+        this.type = type;
     }
 
-    public short getClass_() {
-        return DnsUtil.getShort(byteBuffer, getPosition(Field.Q_Class));
+    public short getClazz() {
+        return clazz;
     }
 
-    public void setClass_(short class_) {
-        DnsUtil.setShort(byteBuffer, getPosition(Field.Q_Class), class_);
-    }
-
-    @Override
-    public int getPosition(Field field) {
-        return switch (field) {
-            case Q_Name -> 0;
-            case Q_Type -> nameLength;
-            case Q_Class -> nameLength + 2;
-            default -> nameLength + 4;
-        };
+    public void setClazz(short clazz) {
+        this.clazz = clazz;
     }
 }

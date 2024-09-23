@@ -1,53 +1,43 @@
 package com.dinakarans.dns.section;
 
-import com.dinakarans.dns.util.DnsUtil;
+public class DnsAnswer extends DnsQuestion {
+    private int ttl;
 
-import java.nio.ByteBuffer;
+    private short rdLength;
 
-public class DnsAnswer extends Section {
+    private String rData;
 
-    private int nameLength;
-
-    public DnsAnswer(ByteBuffer byteBuffer) {
-        super(byteBuffer);
+    public DnsAnswer() {
+        super();
     }
 
-    public void setName(String name) {
-        byte[] nameBytes = DnsUtil.getNameBytes(name);
-        byteBuffer.put(getPosition(Field.A_Name), nameBytes);
-        nameLength = nameBytes.length;
+    public DnsAnswer(DnsAnswer answer) {
+        this.ttl = answer.ttl;
+        this.rdLength = answer.rdLength;
+        this.rData = answer.rData;
     }
 
-    public void setType(short type) {
-        DnsUtil.setShort(byteBuffer, getPosition(Field.A_Type), type);
+    public int getTtl() {
+        return ttl;
     }
 
-    public void setClass_(short class_) {
-        DnsUtil.setShort(byteBuffer, getPosition(Field.A_Class), class_);
+    public void setTtl(int ttl) {
+        this.ttl = ttl;
     }
 
-    public void setTTL(int ttl) {
-        DnsUtil.setInt(byteBuffer, getPosition(Field.A_TTL), ttl);
+    public short getRdLength() {
+        return rdLength;
     }
 
-    public void setRDLength(short length) {
-        DnsUtil.setShort(byteBuffer, getPosition(Field.A_RDLength), length);
+    public void setRdLength(short rdLength) {
+        this.rdLength = rdLength;
     }
 
-    public void setRData(int data) {
-        DnsUtil.setInt(byteBuffer, getPosition(Field.A_RData), data);
+    public String getRData() {
+        return rData;
     }
 
-    @Override
-    int getPosition(Field field) {
-        return switch (field) {
-            case A_Name -> 0;
-            case A_Type -> nameLength;
-            case A_Class -> nameLength + 2;
-            case A_TTL -> nameLength + 4;
-            case A_RDLength -> nameLength + 8;
-            case A_RData -> nameLength + 10;
-            default -> nameLength + 14;
-        };
+    public void setRData(String rData) {
+        this.rData = rData;
     }
 }
