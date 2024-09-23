@@ -112,6 +112,7 @@ public final class DnsUtil {
             byteBuffer.get(rDataBytes);
             answer.setRData(Arrays.copyOf(rDataBytes, rDataBytes.length));
             answers.add(answer);
+            System.out.println("readAnswers " + i + ": " + answer);
         }
         return answers;
     }
@@ -142,6 +143,7 @@ public final class DnsUtil {
             byteBuffer.putShort(answer.getRdLength());
             byte[] rDataBytes = answer.getRData();
             byteBuffer.put(Arrays.copyOf(rDataBytes, rDataBytes.length));
+            System.out.println("writeAnswers: " + answer);
         }
     }
 }
