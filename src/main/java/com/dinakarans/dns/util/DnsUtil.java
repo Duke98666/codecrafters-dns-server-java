@@ -21,10 +21,12 @@ public final class DnsUtil {
 
     public static String parseName(ByteBuffer byteBuffer) {
         StringJoiner name = new StringJoiner(".");
+        int position = byteBuffer.position();
         int labelLength;
-        byteBuffer.rewind();
+        boolean compression = false;
         while ((labelLength = byteBuffer.get()) != 0) {
             if ((labelLength & 0B11_00_00_00) == 0B11_00_00_00) {
+                compression = true;
                 int offset = ((labelLength & 0B00_11_11_11) << 8) | (byteBuffer.get() & 0B11_11_11_11);
                 byteBuffer.position(offset);
             } else {
@@ -33,7 +35,9 @@ public final class DnsUtil {
                 name.add(new String(label, StandardCharsets.UTF_8));
             }
         }
-        byteBuffer.rewind();
+        if (compression) {
+            byteBuffer.position(position);
+        }
         return name.toString();
     }
 
