@@ -40,10 +40,10 @@ public class DnsAnswer extends DnsQuestion {
                 ", ttl=" + ttl +
                 ", rdLength=" + rdLength +
                 ", rData='"
-                    + String.valueOf(rData.charAt(0)) + "."
-                    + String.valueOf(rData.charAt(1)) + "."
-                    + String.valueOf(rData.charAt(2)) + "."
-                    + String.valueOf(rData.charAt(3))
+                    + String.valueOf((int) rData.charAt(0)) + "."
+                    + String.valueOf((int) rData.charAt(1)) + "."
+                    + String.valueOf((int) rData.charAt(2)) + "."
+                    + String.valueOf((int) rData.charAt(3))
                 + '\'' +
                 '}';
     }
