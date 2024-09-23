@@ -39,7 +39,12 @@ public class DnsAnswer extends DnsQuestion {
                 ", class=" + getClazz() +
                 ", ttl=" + ttl +
                 ", rdLength=" + rdLength +
-                ", rData='" + rData + '\'' +
+                ", rData='"
+                    + String.valueOf(rData.charAt(0)) + "."
+                    + String.valueOf(rData.charAt(1)) + "."
+                    + String.valueOf(rData.charAt(2)) + "."
+                    + String.valueOf(rData.charAt(3))
+                + '\'' +
                 '}';
     }
 }
